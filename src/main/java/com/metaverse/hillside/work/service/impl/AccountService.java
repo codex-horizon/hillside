@@ -5,6 +5,7 @@ import com.metaverse.hillside.common.constants.DeleteStatusEnum;
 import com.metaverse.hillside.common.converter.IConverter;
 import com.metaverse.hillside.common.exception.BusinessException;
 import com.metaverse.hillside.common.restful.response.ApiPageable;
+import com.metaverse.hillside.common.utils.RSAUtil;
 import com.metaverse.hillside.common.utils.XTokenUtil;
 import com.metaverse.hillside.core.env.EnvProperties;
 import com.metaverse.hillside.work.dto.AccountDto;
@@ -13,6 +14,7 @@ import com.metaverse.hillside.work.qry.AccountQry;
 import com.metaverse.hillside.work.repository.IAccountRepository;
 import com.metaverse.hillside.work.service.IAccountService;
 import com.metaverse.hillside.work.vo.AccountVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AccountService implements IAccountService {
 
@@ -161,6 +164,16 @@ public class AccountService implements IAccountService {
             put(Constants.ACCOUNT_ID, account);
             put(Constants.ACCOUNT_PASSWORD, password);
         }}, envProperties.getJwtSignatureSecretKey());
+    }
+
+    /**
+     * 获取 RSA非对称加密 公钥 服务
+     *
+     * @return 返回 RSA非对称加密 公钥 结果
+     */
+    @Override
+    public String fetchPublicKey() {
+        return RSAUtil.getPublicKey();
     }
 
 }

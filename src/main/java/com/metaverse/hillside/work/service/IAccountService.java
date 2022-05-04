@@ -57,4 +57,11 @@ public interface IAccountService {
      * @return 返回 X-Token 结果
      */
     String fetchXToken(String account, String password);
+
+    /**
+     * 获取 RSA非对称加密 公钥 服务
+     *
+     * @return 返回 RSA非对称加密 公钥 结果
+     */
+    String fetchPublicKey();
 }

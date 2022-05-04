@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试接口</title>
+</head>
+<body>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.js"></script>
+<script>
+    const requestHttp = axios.create({
+        baseURL: 'http://localhost:8080/hillside',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        timeout: 1.5 * 100000,
+        withCredentials: true // 每次请求携带cookie
+    });
+    requestHttp.interceptors.request.use((config) => {
+        return config;
+    }, (error) => {
+        return Promise.reject(error);
+    });
+    requestHttp.interceptors.response.use((response) => {
+        if (response.status === 200) {
+            // 因axios响应头会自动传小写，故转小写
+            return Promise.resolve(response.data);
+        }
+        return Promise.reject(response.data);
+    }, (error) => {
+        // return Promise.reject(error.response.data); // （弱化）不能对外打印，不然console控制台会查看具体信息
+        return Promise.reject(error);
+    });
+
+    requestHttp.get('/account/t2b/fetchPublicKey').then(response => {
+        console.info(response);
+    }).catch(error => {
+        console.error(error);
+    });
+</script>
+</body>
+</html>

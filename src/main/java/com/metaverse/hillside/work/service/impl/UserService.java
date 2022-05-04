@@ -11,6 +11,7 @@ import com.metaverse.hillside.work.repository.IAccountRepository;
 import com.metaverse.hillside.work.repository.IUserRepository;
 import com.metaverse.hillside.work.service.IUserService;
 import com.metaverse.hillside.work.vo.UserVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.Predicate;
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserService implements IUserService {
 

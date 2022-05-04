@@ -29,8 +29,17 @@ public class AccountController {
     }
 
     /**
-     * 获取RSA非对称加密 公钥
+     * 获取 RSA非对称加密 公钥 接口
+     *
+     * @return 响应 RSA非对称加密 公钥 结果
      */
+    @GetMapping(
+            name = "获取 RSA非对称加密 公钥 接口",
+            path = "/t2b/fetchPublicKey"
+    )
+    public ApiResult<String> fetchPublicKey() {
+        return ApiResult.succeeded("获取 RSA非对称加密 公钥 完成", iAccountService.fetchPublicKey());
+    }
 
 
     /**
