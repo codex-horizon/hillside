@@ -10,4 +10,6 @@ public class Constants {
 
     public static final String ACCOUNT_PASSWORD = "Account-Password";
 
+    public static final String PUBLIC_KEY = "Public-Key";
+
 }

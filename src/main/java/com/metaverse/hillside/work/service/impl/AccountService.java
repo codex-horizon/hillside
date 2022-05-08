@@ -8,6 +8,7 @@ import com.metaverse.hillside.common.restful.response.ApiPageable;
 import com.metaverse.hillside.common.utils.RSAUtil;
 import com.metaverse.hillside.common.utils.XTokenUtil;
 import com.metaverse.hillside.core.env.EnvProperties;
+import com.metaverse.hillside.core.setting.ISettingDefault;
 import com.metaverse.hillside.work.dto.AccountDto;
 import com.metaverse.hillside.work.entity.AccountEntity;
 import com.metaverse.hillside.work.qry.AccountQry;
@@ -37,12 +38,16 @@ public class AccountService implements IAccountService {
 
     private final EnvProperties envProperties;
 
+    private final ISettingDefault iSettingDefault;
+
     AccountService(final IAccountRepository iAccountRepository,
                    final IConverter iConverter,
-                   final EnvProperties envProperties) {
+                   final EnvProperties envProperties,
+                   final ISettingDefault iSettingDefault) {
         this.iAccountRepository = iAccountRepository;
         this.iConverter = iConverter;
         this.envProperties = envProperties;
+        this.iSettingDefault = iSettingDefault;
     }
 
     /**
@@ -149,20 +154,22 @@ public class AccountService implements IAccountService {
     @Override
     public String fetchXToken(String account, String password) {
         // 1、账号、密码解密
-//        RSAUtil.()
+        String publicKey = iSettingDefault.getPublicKeyByCookie();
+        String accountStr = RSAUtil.decrypt(account, publicKey);
+        String passwordStr = RSAUtil.decrypt(password, publicKey);
 
         // 2、库里是否存在
         AccountEntity accountEntity = new AccountEntity();
-        accountEntity.setAccount(account);
-        accountEntity.setPassword(password);
+        accountEntity.setAccount(accountStr);
+        accountEntity.setPassword(passwordStr);
         if (!iAccountRepository.exists(Example.of(accountEntity))) {
             throw new BusinessException("用户不存在");
         }
 
         // 3、根据账号、密码生成X-Token并返回
         return XTokenUtil.generateXToken(new HashMap<String, String>() {{
-            put(Constants.ACCOUNT_ID, account);
-            put(Constants.ACCOUNT_PASSWORD, password);
+            put(Constants.ACCOUNT_ID, accountStr);
+            put(Constants.ACCOUNT_PASSWORD, passwordStr);
         }}, envProperties.getJwtSignatureSecretKey());
     }
 
@@ -173,7 +180,9 @@ public class AccountService implements IAccountService {
      */
     @Override
     public String fetchPublicKey() {
-        return RSAUtil.getPublicKey();
+        String publicKey = RSAUtil.getPublicKey();
+        iSettingDefault.addPublicKeyByCookie(publicKey);
+        return publicKey;
     }
 
 }
