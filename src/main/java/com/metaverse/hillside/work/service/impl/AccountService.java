@@ -153,6 +153,7 @@ public class AccountService implements IAccountService {
         String publicKey = CookieUtil.getPublicKeyByCookie();
         String accountStr = RSAUtil.decrypt(account, publicKey);
         String passwordStr = RSAUtil.decrypt(password, publicKey);
+        RSAUtil.removeKey(publicKey);
 
         // 2、库里是否存在
         AccountEntity accountEntity = new AccountEntity();

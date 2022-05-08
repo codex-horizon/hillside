@@ -21,10 +21,14 @@ import java.util.Map;
 public class RSAUtil {
 
     // 私钥字符串
-    private final static Map<String, String> keyCache = new HashMap<>();
+    private final static Map<String, String> keyCaches = new HashMap<>();
 
     public static String getPublicKey() {
         return initKey();
+    }
+
+    public static String removeKey(String publicKey) {
+        return keyCaches.remove(publicKey);
     }
 
     /**
@@ -44,7 +48,7 @@ public class RSAUtil {
             RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
             // 私钥字符串、公钥字符串
             String publicKeyStr = new String(Base64.encodeBase64(publicKey.getEncoded()));
-            keyCache.put(publicKeyStr, new String(Base64.encodeBase64(privateKey.getEncoded())));
+            keyCaches.put(publicKeyStr, new String(Base64.encodeBase64(privateKey.getEncoded())));
             return publicKeyStr;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -80,7 +84,7 @@ public class RSAUtil {
      * @param str 加密字符串
      */
     public static String decrypt(String str, String publicKey) {
-        String privateKey = keyCache.get(publicKey);
+        String privateKey = keyCaches.get(publicKey);
         try {
             // RSA解密
             Cipher cipher = Cipher.getInstance("RSA");
