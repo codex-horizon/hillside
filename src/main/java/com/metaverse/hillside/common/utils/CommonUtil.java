@@ -9,7 +9,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Slf4j
@@ -71,28 +70,4 @@ public class CommonUtil {
         }
         return servletRequestAttributes;
     }
-
-    private static final char[] DIGITS_LETTER
-            = {'0', '1', '2', '3', '4', '5', '6', '7',
-            '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
-    public static String toHex(byte[] data) {
-        final StringBuilder sb = new StringBuilder(data.length * 2);
-        for (byte datum : data) {
-            sb.append(DIGITS_LETTER[(datum >>> 4) & 0x0F]);
-            sb.append(DIGITS_LETTER[datum & 0x0F]);
-        }
-        return sb.toString();
-    }
-
-    public static String hexString(String str) {
-        int len = str.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(str.charAt(i), 16) << 4)
-                    + Character.digit(str.charAt(i + 1), 16));
-        }
-        return new String(data, StandardCharsets.UTF_8);
-    }
-
 }
