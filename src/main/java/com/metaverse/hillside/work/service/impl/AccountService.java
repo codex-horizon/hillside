@@ -170,6 +170,21 @@ public class AccountService implements IAccountService {
     }
 
     /**
+     * 校验 账户 是否存在 服务
+     *
+     * @param account  账户
+     * @param password 密码
+     * @return 返回 账户 是否存在
+     */
+    @Override
+    public Boolean exists(String account, String password) {
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setAccount(account);
+        accountEntity.setPassword(password);
+        return iAccountRepository.exists(Example.of(accountEntity));
+    }
+
+    /**
      * 获取 RSA非对称加密 公钥 服务
      *
      * @return 返回 RSA非对称加密 公钥 结果

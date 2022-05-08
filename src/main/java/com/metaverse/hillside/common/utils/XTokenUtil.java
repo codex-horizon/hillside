@@ -3,6 +3,7 @@ package com.metaverse.hillside.common.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
@@ -42,9 +43,9 @@ public class XTokenUtil {
         // 设置签发时间
         builder.withIssuedAt(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 
-        // 构建并设置指定X-Token过期时间为7天、签名算法
+        // 构建并设置指定X-Token过期时间为1天、签名算法
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 7);
+        calendar.add(Calendar.DATE, 1);
         return builder
                 .withExpiresAt(calendar.getTime())
                 .sign(Algorithm.HMAC256(jwtSignatureSecretKey));
@@ -57,8 +58,21 @@ public class XTokenUtil {
      * @param jwtSignatureSecretKey X-Token签名密钥
      * @return 返回 解码 对象
      */
-    public static DecodedJWT decodeXToken(String xToken, String jwtSignatureSecretKey) {
+    private static DecodedJWT decodeXToken(String xToken, String jwtSignatureSecretKey) {
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(jwtSignatureSecretKey)).build();
         return jwtVerifier.verify(xToken);
     }
+
+    /**
+     * 获取 Claims
+     *
+     * @param xToken                X-Token
+     * @param jwtSignatureSecretKey X-Token签名密钥
+     * @return 返回 Claims 对象
+     */
+    public static Map<String, Claim> getClaims(String xToken, String jwtSignatureSecretKey) {
+        DecodedJWT decodedJWT = decodeXToken(xToken, jwtSignatureSecretKey);
+        return decodedJWT.getClaims();
+    }
+
 }

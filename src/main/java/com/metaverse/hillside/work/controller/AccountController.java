@@ -3,7 +3,7 @@ package com.metaverse.hillside.work.controller;
 import com.metaverse.hillside.common.restful.response.ApiPageable;
 import com.metaverse.hillside.common.restful.response.ApiResult;
 import com.metaverse.hillside.work.dto.AccountDto;
-import com.metaverse.hillside.work.dto.TempAccountDto;
+import com.metaverse.hillside.work.dto.groups.ValidatedGroups;
 import com.metaverse.hillside.work.qry.AccountQry;
 import com.metaverse.hillside.work.service.IAccountService;
 import com.metaverse.hillside.work.vo.AccountVo;
@@ -46,7 +46,7 @@ public class AccountController {
     /**
      * 获取 X-Token 接口
      *
-     * @param tempAccountDto 账户、密码
+     * @param accountDto 账户信息
      * @return 响应 X-Token 结果
      */
     @PostMapping(
@@ -54,9 +54,9 @@ public class AccountController {
             path = "/toB/fetchXToken",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ApiResult<String> fetchXToken(@RequestBody @Validated TempAccountDto tempAccountDto) {
-        String account = tempAccountDto.getAccount();
-        String password = tempAccountDto.getPassword();
+    public ApiResult<String> fetchXToken(@RequestBody @Validated(ValidatedGroups.Login.class) AccountDto accountDto) {
+        String account = accountDto.getAccount();
+        String password = accountDto.getPassword();
         return ApiResult.succeeded("获取 X-Token 完成", iAccountService.fetchXToken(account, password));
     }
 
@@ -100,7 +100,7 @@ public class AccountController {
             path = "/toB/add",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ApiResult<Boolean> add(@RequestBody @Validated AccountDto accountDto) {
+    public ApiResult<Boolean> add(@RequestBody @Validated(ValidatedGroups.Add.class) AccountDto accountDto) {
         return ApiResult.succeeded("新增 账户 信息 完成", iAccountService.add(accountDto));
     }
 

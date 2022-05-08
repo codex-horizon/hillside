@@ -65,4 +65,13 @@ public interface IAccountService {
      */
     String fetchXToken(String account, String password);
 
+    /**
+     * 校验 账户 是否存在 服务
+     *
+     * @param account  账户
+     * @param password 密码
+     * @return 返回 账户 是否存在
+     */
+    Boolean exists(String account, String password);
+
 }
