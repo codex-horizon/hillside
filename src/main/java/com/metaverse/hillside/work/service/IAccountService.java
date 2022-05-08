@@ -50,6 +50,13 @@ public interface IAccountService {
     AccountVo findDetailById(Long id);
 
     /**
+     * 获取 RSA非对称加密 公钥 服务
+     *
+     * @return 返回 RSA非对称加密 公钥 结果
+     */
+    String fetchPublicKey();
+
+    /**
      * 获取 X-Token 服务
      *
      * @param account  账户
@@ -58,10 +65,4 @@ public interface IAccountService {
      */
     String fetchXToken(String account, String password);
 
-    /**
-     * 获取 RSA非对称加密 公钥 服务
-     *
-     * @return 返回 RSA非对称加密 公钥 结果
-     */
-    String fetchPublicKey();
 }

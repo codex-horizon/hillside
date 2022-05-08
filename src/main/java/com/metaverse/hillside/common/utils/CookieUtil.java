@@ -6,14 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class CookieUtil {
 
     public static void addPublicKeyByCookie(String publicKey) {
         // 添加Cookie至Response
-        Cookie cookie = new Cookie(Constants.PUBLIC_KEY, CommonUtil.toHex(publicKey.getBytes(StandardCharsets.UTF_8)));
+        Cookie cookie = new Cookie(
+                Constants.PUBLIC_KEY,
+                publicKey
+        );
         cookie.setMaxAge(60); // 有效60秒
         cookie.setPath("/");
         cookie.setSecure(false);
@@ -34,6 +36,6 @@ public class CookieUtil {
         if (!StringUtils.hasLength(publicKey)) {
             throw new BusinessException("客户端Cookie未启用");
         }
-        return CommonUtil.hexString(publicKey);
+        return publicKey;
     }
 }
