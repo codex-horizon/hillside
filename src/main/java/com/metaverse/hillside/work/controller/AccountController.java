@@ -3,6 +3,7 @@ package com.metaverse.hillside.work.controller;
 import com.metaverse.hillside.common.restful.response.ApiPageable;
 import com.metaverse.hillside.common.restful.response.ApiResult;
 import com.metaverse.hillside.work.dto.AccountDto;
+import com.metaverse.hillside.work.dto.TempAccountDto;
 import com.metaverse.hillside.work.qry.AccountQry;
 import com.metaverse.hillside.work.service.IAccountService;
 import com.metaverse.hillside.work.vo.AccountVo;
@@ -35,7 +36,7 @@ public class AccountController {
      */
     @GetMapping(
             name = "获取 RSA非对称加密 公钥 接口",
-            path = "/t2b/fetchPublicKey"
+            path = "/toB/fetchPublicKey"
     )
     public ApiResult<String> fetchPublicKey() {
         return ApiResult.succeeded("获取 RSA非对称加密 公钥 完成", iAccountService.fetchPublicKey());
@@ -45,18 +46,17 @@ public class AccountController {
     /**
      * 获取 X-Token 接口
      *
-     * @param account  账户
-     * @param password 密码
+     * @param tempAccountDto 账户、密码
      * @return 响应 X-Token 结果
      */
-    @GetMapping(
+    @PostMapping(
             name = "获取 X-Token 接口",
-            path = "/t2b/fetchXToken"
+            path = "/toB/fetchXToken",
+            consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ApiResult<String> fetchXToken(
-            @RequestParam("account") String account,
-            @RequestParam("password") String password
-    ) {
+    public ApiResult<String> fetchXToken(@RequestBody @Validated TempAccountDto tempAccountDto) {
+        String account = tempAccountDto.getAccount();
+        String password = tempAccountDto.getPassword();
         return ApiResult.succeeded("获取 X-Token 完成", iAccountService.fetchXToken(account, password));
     }
 
@@ -68,7 +68,7 @@ public class AccountController {
      */
     @PostMapping(
             name = "查询 账户列表 分页 接口",
-            path = "/t2b/findByPageable",
+            path = "/toB/findByPageable",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ApiResult<ApiPageable<List<AccountVo>>> findByPageable(@RequestBody AccountQry accountQry) {
@@ -83,7 +83,7 @@ public class AccountController {
      */
     @GetMapping(
             name = "根据 账户Id 查询 详情 接口",
-            path = "/t2b/findDetailById/{id}"
+            path = "/toB/findDetailById/{id}"
     )
     public ApiResult<AccountVo> findDetailById(@PathVariable("id") Long id) {
         return ApiResult.succeeded("根据 账户Id 查询 详情 完成", iAccountService.findDetailById(id));
@@ -97,7 +97,7 @@ public class AccountController {
      */
     @PostMapping(
             name = "新增 账户 信息 接口",
-            path = "/t2b/add",
+            path = "/toB/add",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ApiResult<Boolean> add(@RequestBody @Validated AccountDto accountDto) {
@@ -112,7 +112,7 @@ public class AccountController {
      */
     @PutMapping(
             name = "修改 账户 信息 接口",
-            path = "/t2b/modify",
+            path = "/toB/modify",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ApiResult<Boolean> modify(@RequestBody @Validated AccountDto accountDto) {

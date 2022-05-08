@@ -36,7 +36,7 @@ public class UserController {
      */
     @PostMapping(
             name = "查询 用户列表 分页 接口",
-            path = "/t2b/findByPageable",
+            path = "/toB/findByPageable",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ApiResult<ApiPageable<List<UserVo>>> findByPageable(@RequestBody UserQry userQry) {
@@ -51,7 +51,7 @@ public class UserController {
      */
     @GetMapping(
             name = "根据 用户Id 查询 详情 接口",
-            path = "/t2b/findDetailById/{id}"
+            path = "/toB/findDetailById/{id}"
     )
     public ApiResult<UserVo> findDetailById(@PathVariable("id") Long id) {
         return ApiResult.succeeded("根据 用户Id 查询 详情 完成", iUserService.findDetailById(id));
@@ -65,7 +65,7 @@ public class UserController {
      */
     @DeleteMapping(
             name = "根据 用户Id 删除 接口",
-            path = "/t2b/deleteById/{id}"
+            path = "/toB/deleteById/{id}"
     )
     public ApiResult<Boolean> deleteById(@PathVariable("id") Long id) {
         return ApiResult.succeeded("根据 用户Id 删除 完成", iUserService.deleteById(id));
@@ -79,7 +79,7 @@ public class UserController {
      */
     @PostMapping(
             name = "新增 用户 信息 接口",
-            path = "/t2b/add",
+            path = "/toB/add",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ApiResult<Boolean> add(@RequestBody @Validated UserDto userDto) {
