@@ -5,10 +5,10 @@ import com.metaverse.hillside.common.constants.DeleteStatusEnum;
 import com.metaverse.hillside.common.converter.IConverter;
 import com.metaverse.hillside.common.exception.BusinessException;
 import com.metaverse.hillside.common.restful.response.ApiPageable;
+import com.metaverse.hillside.common.utils.CookieUtil;
 import com.metaverse.hillside.common.utils.RSAUtil;
 import com.metaverse.hillside.common.utils.XTokenUtil;
 import com.metaverse.hillside.core.env.EnvProperties;
-import com.metaverse.hillside.core.setting.ISettingDefault;
 import com.metaverse.hillside.work.dto.AccountDto;
 import com.metaverse.hillside.work.entity.AccountEntity;
 import com.metaverse.hillside.work.qry.AccountQry;
@@ -38,16 +38,12 @@ public class AccountService implements IAccountService {
 
     private final EnvProperties envProperties;
 
-    private final ISettingDefault iSettingDefault;
-
     AccountService(final IAccountRepository iAccountRepository,
                    final IConverter iConverter,
-                   final EnvProperties envProperties,
-                   final ISettingDefault iSettingDefault) {
+                   final EnvProperties envProperties) {
         this.iAccountRepository = iAccountRepository;
         this.iConverter = iConverter;
         this.envProperties = envProperties;
-        this.iSettingDefault = iSettingDefault;
     }
 
     /**
@@ -154,7 +150,7 @@ public class AccountService implements IAccountService {
     @Override
     public String fetchXToken(String account, String password) {
         // 1、账号、密码解密
-        String publicKey = iSettingDefault.getPublicKeyByCookie();
+        String publicKey = CookieUtil.getPublicKeyByCookie();
         String accountStr = RSAUtil.decrypt(account, publicKey);
         String passwordStr = RSAUtil.decrypt(password, publicKey);
 
@@ -181,7 +177,7 @@ public class AccountService implements IAccountService {
     @Override
     public String fetchPublicKey() {
         String publicKey = RSAUtil.getPublicKey();
-        iSettingDefault.addPublicKeyByCookie(publicKey);
+        CookieUtil.addPublicKeyByCookie(publicKey);
         return publicKey;
     }
 

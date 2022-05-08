@@ -7,8 +7,6 @@ import com.metaverse.hillside.core.configurer.filter.XssAndSqlInjectorFilter;
 import com.metaverse.hillside.core.configurer.listener.ApplicationContextListener;
 import com.metaverse.hillside.core.configurer.listener.ApplicationSessionListener;
 import com.metaverse.hillside.core.configurer.servlet.ApplicationHttpServlet;
-import com.metaverse.hillside.core.setting.ISettingDefault;
-import com.metaverse.hillside.core.setting.SettingDefault;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -26,11 +24,6 @@ import java.util.Optional;
 @Slf4j
 @Configuration
 public class BeansRegister implements AuditorAware<String> {
-
-    @Bean
-    public ISettingDefault settingDefault() {
-        return new SettingDefault();
-    }
 
     @Bean
     public IConverter converterBean() {

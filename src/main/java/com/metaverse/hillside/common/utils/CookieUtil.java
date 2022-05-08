@@ -1,8 +1,7 @@
-package com.metaverse.hillside.core.setting;
+package com.metaverse.hillside.common.utils;
 
 import com.metaverse.hillside.common.constants.Constants;
 import com.metaverse.hillside.common.exception.BusinessException;
-import com.metaverse.hillside.common.utils.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -10,10 +9,9 @@ import javax.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-public class SettingDefault implements ISettingDefault {
+public class CookieUtil {
 
-    @Override
-    public void addPublicKeyByCookie(String publicKey) {
+    public static void addPublicKeyByCookie(String publicKey) {
         // 添加Cookie至Response
         Cookie cookie = new Cookie(Constants.PUBLIC_KEY, CommonUtil.toHex(publicKey.getBytes(StandardCharsets.UTF_8)));
         cookie.setMaxAge(60); // 有效60秒
@@ -24,8 +22,7 @@ public class SettingDefault implements ISettingDefault {
         CommonUtil.getHttpServletResponse().addCookie(cookie);
     }
 
-    @Override
-    public String getPublicKeyByCookie() {
+    public static String getPublicKeyByCookie() {
         Cookie[] cookies = CommonUtil.getHttpServletRequest().getCookies();
         String publicKey = null;
         for (Cookie cookie : cookies) {
