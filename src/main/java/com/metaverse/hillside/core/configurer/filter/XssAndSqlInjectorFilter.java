@@ -9,7 +9,7 @@ import java.io.IOException;
 public class XssAndSqlInjectorFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         log.info("XssAndSqlInjectorFilter,init.");
     }
 

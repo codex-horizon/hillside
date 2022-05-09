@@ -1,42 +1,30 @@
-package com.metaverse.hillside.core.configurer;
+package com.metaverse.hillside.core.configurer.interceptor.register;
 
-import com.metaverse.hillside.core.configurer.interceptor.XTokenInterceptor;
 import com.metaverse.hillside.core.env.EnvProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * 跨域资源共享
+ */
 @Slf4j
 @Configuration
-public class InterceptorRegister implements WebMvcConfigurer {
+public class CrossOriginResourceSharingRegister implements WebMvcConfigurer {
 
-    private EnvProperties envProperties;
+    private final EnvProperties envProperties;
 
-    @Bean
-    XTokenInterceptor xTokenInterceptor(final EnvProperties envProperties) {
+    CrossOriginResourceSharingRegister(final EnvProperties envProperties) {
         this.envProperties = envProperties;
-        return new XTokenInterceptor(envProperties);
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration registration = registry.addInterceptor(xTokenInterceptor(envProperties));
-//        registration.order(Ordered.HIGHEST_PRECEDENCE);
-        registration.addPathPatterns("/**");
-        // 忽略鉴权
-        registration.excludePathPatterns(envProperties.getIgnoreAuthenticationPaths());
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry
+                .addMapping("/**")
                 // 携带Cookie信息
                 .allowCredentials(true)
                 // 允许跨域的域名，可以用*表示允许任何域名使用（从IDEA中打开HTML页面默认端口：63342）
@@ -49,6 +37,3 @@ public class InterceptorRegister implements WebMvcConfigurer {
                 .exposedHeaders(HttpHeaders.SET_COOKIE).maxAge(3600L);
     }
 }
-
-
-

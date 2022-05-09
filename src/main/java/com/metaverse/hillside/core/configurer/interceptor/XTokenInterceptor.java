@@ -21,14 +21,11 @@ import java.util.Map;
 @Slf4j
 public class XTokenInterceptor implements HandlerInterceptor {
 
-    private final EnvProperties envProperties;
+    @Autowired
+    private EnvProperties envProperties;
 
     @Autowired
     private IAccountService iAccountService;
-
-    public XTokenInterceptor(final EnvProperties envProperties) {
-        this.envProperties = envProperties;
-    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -54,7 +51,6 @@ public class XTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-
     }
 
 }

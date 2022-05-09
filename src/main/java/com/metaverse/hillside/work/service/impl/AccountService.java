@@ -5,7 +5,6 @@ import com.metaverse.hillside.common.constants.DeleteStatusEnum;
 import com.metaverse.hillside.common.converter.IConverter;
 import com.metaverse.hillside.common.exception.BusinessException;
 import com.metaverse.hillside.common.restful.response.ApiPageable;
-import com.metaverse.hillside.common.utils.CookieUtil;
 import com.metaverse.hillside.common.utils.RSAUtil;
 import com.metaverse.hillside.common.utils.XTokenUtil;
 import com.metaverse.hillside.core.env.EnvProperties;
@@ -150,10 +149,10 @@ public class AccountService implements IAccountService {
     @Override
     public String fetchXToken(String account, String password) {
         // 1、账号、密码解密
-        String publicKey = CookieUtil.getPublicKeyByCookie();
-        String accountStr = RSAUtil.decrypt(account, publicKey);
-        String passwordStr = RSAUtil.decrypt(password, publicKey);
-        RSAUtil.removeKey(publicKey);
+//        String publicKey = CookieUtil.getPublicKeyByCookie();
+        String accountStr = RSAUtil.decrypt(account, null);
+        String passwordStr = RSAUtil.decrypt(password, null);
+//        RSAUtil.removeKey(publicKey);
 
         // 2、库里是否存在
         AccountEntity accountEntity = new AccountEntity();
@@ -193,7 +192,7 @@ public class AccountService implements IAccountService {
     @Override
     public String fetchPublicKey() {
         String publicKey = RSAUtil.getPublicKey();
-        CookieUtil.addPublicKeyByCookie(publicKey);
+//        CookieUtil.addPublicKeyByCookie(publicKey);
         return publicKey;
     }
 

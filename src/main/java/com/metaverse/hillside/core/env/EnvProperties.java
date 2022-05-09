@@ -17,4 +17,6 @@ public class EnvProperties {
 
     private String jwtSignatureSecretKey;
 
+    private String[] promiseRSAPaths;
+
 }

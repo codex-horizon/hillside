@@ -10,6 +10,6 @@ public class Constants {
 
     public static final String ACCOUNT_PASSWORD = "Account-Password";
 
-    public static final String PUBLIC_KEY = "Public-Key";
+    public static final String RSA_PUBLIC_KEY = "RSA-Public-Key";
 
 }
