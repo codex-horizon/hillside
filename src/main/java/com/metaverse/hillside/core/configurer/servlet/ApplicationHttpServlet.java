@@ -12,18 +12,18 @@ import java.io.IOException;
 public class ApplicationHttpServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        log.info("ApplicationHttpServlet.doGet()");
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        log.info("ApplicationHttpServlet.doPost()");
     }
 
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        log.info("ApplicationHttpServlet.doPut()");
     }
 
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        log.info("ApplicationHttpServlet.doDelete()");
     }
 }

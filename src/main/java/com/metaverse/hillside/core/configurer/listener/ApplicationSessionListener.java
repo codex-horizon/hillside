@@ -10,12 +10,12 @@ public class ApplicationSessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        System.out.println("ApplicationSessionListener,init.");
+        log.info("ApplicationSessionListener,init.");
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-        System.out.println("ApplicationSessionListener,destroy.");
+        log.info("ApplicationSessionListener,destroy.");
     }
 
 }
