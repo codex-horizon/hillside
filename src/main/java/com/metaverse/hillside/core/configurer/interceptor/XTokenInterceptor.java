@@ -6,8 +6,8 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.metaverse.hillside.common.constants.Constants;
 import com.metaverse.hillside.common.exception.BusinessException;
-import com.metaverse.hillside.common.utils.XTokenUtil;
 import com.metaverse.hillside.core.env.EnvProperties;
+import com.metaverse.hillside.core.helper.XTokenHelper;
 import com.metaverse.hillside.work.service.IAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,9 @@ public class XTokenInterceptor implements HandlerInterceptor {
     private EnvProperties envProperties;
 
     @Autowired
+    private XTokenHelper xTokenHelper;
+
+    @Autowired
     private IAccountService iAccountService;
 
     @Override
@@ -34,7 +37,7 @@ public class XTokenInterceptor implements HandlerInterceptor {
             throw new BusinessException("X-Token 空");
         }
         try {
-            Map<String, Claim> claims = XTokenUtil.getClaims(xToken, envProperties.getJwtSignatureSecretKey());
+            Map<String, Claim> claims = xTokenHelper.getClaims(xToken, envProperties.getJwtSignatureSecretKey());
             String account = claims.get(Constants.ACCOUNT_ID).asString();
             String password = claims.get(Constants.ACCOUNT_PASSWORD).asString();
             return iAccountService.exists(account, password);

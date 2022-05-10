@@ -1,40 +1,63 @@
-package com.metaverse.hillside.common.utils;
+package com.metaverse.hillside.core.helper;
 
+import com.metaverse.hillside.common.constants.Constants;
 import com.metaverse.hillside.common.exception.BusinessException;
+import com.metaverse.hillside.common.utils.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
+import javax.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 动态获取：外部获取公钥，解密时候，也要带回来。使用完成后，移除。
- */
 @Slf4j
-public class RSAUtil {
+@Component
+public class PromiseRSAHelper {
 
     // 私钥字符串
     private final static Map<String, String> keyCaches = new HashMap<>();
 
-    public static String getPublicKey() {
-        return initKey();
+    public String getPublicKey() {
+        String publicKey = initKey();
+        // 设置Cookie Header 使用andHeader能设置多个，setHeader只能设置一个Set-Cookie
+        CommonUtil.getHttpServletResponse().addHeader(HttpHeaders.SET_COOKIE, ResponseCookie.from(Constants.RSA_PUBLIC_KEY, publicKey)
+                .httpOnly(true) // 禁止js读取
+                .secure(true) // 在http下也传输
+                .domain("localhost") // 域名
+                .path("/")
+                .maxAge(Duration.ofSeconds(60L)) // 1个小时候过期
+                .sameSite("None").build().toString()); // 大多数情况也是不发送第三方 Cookie，但是导航到目标网址的 Get 请求除外
+        return publicKey;
     }
 
-    public static String removeKey(String publicKey) {
-        return keyCaches.remove(publicKey);
+    public String fetchPublicKey() {
+        for (Cookie cookie : CommonUtil.getHttpServletRequest().getCookies()) {
+            if (cookie.getName().equals(Constants.RSA_PUBLIC_KEY)) {
+                return cookie.getValue();
+            }
+        }
+        throw new BusinessException("Cookie被禁用");
+    }
+
+    public void removeKey(String publicKey) {
+        keyCaches.remove(publicKey);
     }
 
     /**
      * 获取公钥私钥
      */
-    public static String initKey() {
+    public String initKey() {
         try {
             // KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
             KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
@@ -63,7 +86,7 @@ public class RSAUtil {
      * @param str       加密字符串
      * @param publicKey 公钥
      */
-    public static String encrypt(String str, String publicKey) {
+    public String encrypt(String str, String publicKey) {
         try {
             //base64编码的公钥
             byte[] decoded = Base64.decodeBase64(publicKey);
@@ -83,7 +106,7 @@ public class RSAUtil {
      *
      * @param str 加密字符串
      */
-    public static String decrypt(String str, String publicKey) {
+    public String decrypt(String str, String publicKey) {
         String privateKey = keyCaches.get(publicKey);
         try {
             // RSA解密
@@ -101,12 +124,4 @@ public class RSAUtil {
         }
     }
 
-    public static void main(String[] args) {
-        String publicKey = RSAUtil.getPublicKey();
-        log.info("publicKey:[{}]", publicKey);
-        String account = encrypt("13221811969", publicKey);
-        String password = encrypt("Wubc0229()", publicKey);
-        System.out.println(decrypt(account, publicKey));
-        System.out.println(decrypt(password, publicKey));
-    }
 }

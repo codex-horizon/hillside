@@ -1,13 +1,20 @@
-package com.metaverse.hillside.common.utils;
+package com.metaverse.hillside.core.helper;
 
-import okhttp3.*;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
 
-public class HttpUtils {
+@Slf4j
+@Component
+public class RequestHelper {
 
-    public static OkHttpClient okHttpClient;
+    public static OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
 
     /**
      * 构建form表单
@@ -76,9 +83,6 @@ public class HttpUtils {
      * @throws IOException IO异常
      */
     public static Response callExecuteRequest(Request request) throws IOException {
-        if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient.Builder().build();
-        }
         return okHttpClient.newCall(request).execute();
     }
 }

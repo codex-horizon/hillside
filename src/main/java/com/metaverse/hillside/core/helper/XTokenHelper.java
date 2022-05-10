@@ -1,4 +1,4 @@
-package com.metaverse.hillside.common.utils;
+package com.metaverse.hillside.core.helper;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
@@ -6,6 +6,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.metaverse.hillside.core.env.EnvProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -16,10 +19,15 @@ import java.util.Map;
 
 import static sun.security.x509.CertificateIssuerExtension.ISSUER;
 
-/**
- * https://mp.weixin.qq.com/s/cd3PLLHA80HVS3STUf2ygw
- */
-public class XTokenUtil {
+@Slf4j
+@Component
+public class XTokenHelper {
+
+    private final EnvProperties envProperties;
+
+    XTokenHelper(final EnvProperties envProperties) {
+        this.envProperties = envProperties;
+    }
 
     /**
      * 生成 X-Token
@@ -27,7 +35,7 @@ public class XTokenUtil {
      * @param payload 有效载荷信息
      * @return 返回 X-Token
      */
-    public static String generateXToken(Map<String, String> payload, String jwtSignatureSecretKey) {
+    public String generateXToken(Map<String, String> payload) {
         JWTCreator.Builder builder = JWT.create();
         // 构建Header
         builder.withHeader(new HashMap<String, Object>() {{
@@ -48,7 +56,7 @@ public class XTokenUtil {
         calendar.add(Calendar.DATE, 1);
         return builder
                 .withExpiresAt(calendar.getTime())
-                .sign(Algorithm.HMAC256(jwtSignatureSecretKey));
+                .sign(Algorithm.HMAC256(envProperties.getJwtSignatureSecretKey()));
     }
 
     /**
@@ -58,7 +66,7 @@ public class XTokenUtil {
      * @param jwtSignatureSecretKey X-Token签名密钥
      * @return 返回 解码 对象
      */
-    private static DecodedJWT decodeXToken(String xToken, String jwtSignatureSecretKey) {
+    private DecodedJWT decodeXToken(String xToken, String jwtSignatureSecretKey) {
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(jwtSignatureSecretKey)).build();
         return jwtVerifier.verify(xToken);
     }
@@ -70,9 +78,8 @@ public class XTokenUtil {
      * @param jwtSignatureSecretKey X-Token签名密钥
      * @return 返回 Claims 对象
      */
-    public static Map<String, Claim> getClaims(String xToken, String jwtSignatureSecretKey) {
+    public Map<String, Claim> getClaims(String xToken, String jwtSignatureSecretKey) {
         DecodedJWT decodedJWT = decodeXToken(xToken, jwtSignatureSecretKey);
         return decodedJWT.getClaims();
     }
-
 }

@@ -5,9 +5,8 @@ import com.metaverse.hillside.common.constants.DeleteStatusEnum;
 import com.metaverse.hillside.common.converter.IConverter;
 import com.metaverse.hillside.common.exception.BusinessException;
 import com.metaverse.hillside.common.restful.response.ApiPageable;
-import com.metaverse.hillside.common.utils.RSAUtil;
-import com.metaverse.hillside.common.utils.XTokenUtil;
-import com.metaverse.hillside.core.env.EnvProperties;
+import com.metaverse.hillside.core.helper.PromiseRSAHelper;
+import com.metaverse.hillside.core.helper.XTokenHelper;
 import com.metaverse.hillside.work.dto.AccountDto;
 import com.metaverse.hillside.work.entity.AccountEntity;
 import com.metaverse.hillside.work.qry.AccountQry;
@@ -25,24 +24,29 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 @Service
 public class AccountService implements IAccountService {
 
+    private final PromiseRSAHelper promiseRSAHelper;
+
+    private final XTokenHelper xTokenHelper;
+
     private final IAccountRepository iAccountRepository;
 
     private final IConverter iConverter;
 
-    private final EnvProperties envProperties;
-
-    AccountService(final IAccountRepository iAccountRepository,
-                   final IConverter iConverter,
-                   final EnvProperties envProperties) {
+    AccountService(final PromiseRSAHelper promiseRSAHelper,
+                   final XTokenHelper xTokenHelper,
+                   final IAccountRepository iAccountRepository,
+                   final IConverter iConverter) {
+        this.promiseRSAHelper = promiseRSAHelper;
+        this.xTokenHelper = xTokenHelper;
         this.iAccountRepository = iAccountRepository;
         this.iConverter = iConverter;
-        this.envProperties = envProperties;
     }
 
     /**
@@ -140,36 +144,6 @@ public class AccountService implements IAccountService {
     }
 
     /**
-     * 获取 X-Token 服务
-     *
-     * @param account  账户
-     * @param password 密码
-     * @return 返回 X-Token 结果
-     */
-    @Override
-    public String fetchXToken(String account, String password) {
-        // 1、账号、密码解密
-//        String publicKey = CookieUtil.getPublicKeyByCookie();
-        String accountStr = RSAUtil.decrypt(account, null);
-        String passwordStr = RSAUtil.decrypt(password, null);
-//        RSAUtil.removeKey(publicKey);
-
-        // 2、库里是否存在
-        AccountEntity accountEntity = new AccountEntity();
-        accountEntity.setAccount(accountStr);
-        accountEntity.setPassword(passwordStr);
-        if (!iAccountRepository.exists(Example.of(accountEntity))) {
-            throw new BusinessException("用户不存在");
-        }
-
-        // 3、根据账号、密码生成X-Token并返回
-        return XTokenUtil.generateXToken(new HashMap<String, String>() {{
-            put(Constants.ACCOUNT_ID, accountStr);
-            put(Constants.ACCOUNT_PASSWORD, passwordStr);
-        }}, envProperties.getJwtSignatureSecretKey());
-    }
-
-    /**
      * 校验 账户 是否存在 服务
      *
      * @param account  账户
@@ -185,15 +159,40 @@ public class AccountService implements IAccountService {
     }
 
     /**
+     * 获取 X-Token 服务
+     *
+     * @param account  账户
+     * @param password 密码
+     * @return 返回 X-Token 结果
+     */
+    @Override
+    public String fetchXToken(String account, String password) {
+        // 1、账号、密码解密
+        String publicKey = promiseRSAHelper.fetchPublicKey();
+        account = promiseRSAHelper.decrypt(account, publicKey);
+        password = promiseRSAHelper.decrypt(password, publicKey);
+        promiseRSAHelper.removeKey(publicKey);
+
+        // 2、库里是否存在
+        if (!exists(account, password)) {
+            throw new BusinessException("用户不存在");
+        }
+
+        // 3、根据账号、密码生成X-Token并返回
+        Map<String, String> payload = new HashMap<>();
+        payload.put(Constants.ACCOUNT_ID, account);
+        payload.put(Constants.ACCOUNT_PASSWORD, password);
+        return xTokenHelper.generateXToken(payload);
+    }
+
+    /**
      * 获取 RSA非对称加密 公钥 服务
      *
      * @return 返回 RSA非对称加密 公钥 结果
      */
     @Override
     public String fetchPublicKey() {
-        String publicKey = RSAUtil.getPublicKey();
-//        CookieUtil.addPublicKeyByCookie(publicKey);
-        return publicKey;
+        return promiseRSAHelper.getPublicKey();
     }
 
 }
