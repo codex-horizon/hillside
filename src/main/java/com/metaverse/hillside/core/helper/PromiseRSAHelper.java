@@ -1,23 +1,17 @@
 package com.metaverse.hillside.core.helper;
 
-import com.metaverse.hillside.common.constants.Constants;
 import com.metaverse.hillside.common.exception.BusinessException;
-import com.metaverse.hillside.common.utils.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
-import javax.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,25 +23,11 @@ public class PromiseRSAHelper {
     private final static Map<String, String> keyCaches = new HashMap<>();
 
     public String getPublicKey() {
-        String publicKey = initKey();
-        // 设置Cookie Header 使用andHeader能设置多个，setHeader只能设置一个Set-Cookie
-        CommonUtil.getHttpServletResponse().addHeader(HttpHeaders.SET_COOKIE, ResponseCookie.from(Constants.RSA_PUBLIC_KEY, publicKey)
-                .httpOnly(true) // 禁止js读取
-                .secure(true) // 在http下也传输
-                .domain("localhost") // 域名
-                .path("/")
-                .maxAge(Duration.ofSeconds(60L)) // 1个小时候过期
-                .sameSite("None").build().toString()); // 大多数情况也是不发送第三方 Cookie，但是导航到目标网址的 Get 请求除外
-        return publicKey;
+        return initKey();
     }
 
-    public String fetchPublicKey() {
-        for (Cookie cookie : CommonUtil.getHttpServletRequest().getCookies()) {
-            if (cookie.getName().equals(Constants.RSA_PUBLIC_KEY)) {
-                return cookie.getValue();
-            }
-        }
-        throw new BusinessException("Cookie被禁用");
+    public String getPublicKey(String publicKey) {
+        return keyCaches.get(publicKey);
     }
 
     public void removeKey(String publicKey) {

@@ -6,7 +6,8 @@
 </head>
 <body>
 <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/jsencrypt/3.2.1/jsencrypt.js"></script><
+<script src="https://cdn.bootcdn.net/ajax/libs/jsencrypt/3.2.1/jsencrypt.js"></script>
+<
 <script>
     const requestHttp = axios.create({
         baseURL: 'http://localhost:8080/hillside',
@@ -36,10 +37,17 @@
         encrypt.setPublicKey(publicKey);
         var account = encrypt.encrypt("13221811969");
         var password = encrypt.encrypt("Wubc0229()");
-        requestHttp.post("/account/toB/fetchXToken", {
-            account: account,
-            password: password
-        }).then(res1 => {
+        requestHttp.post(
+            '/account/toB/fetchXToken',
+            {
+                account: account,
+                password: password
+            },
+            {
+                headers: {
+                    "RSA-Public-Key": publicKey
+                }
+            }).then(res1 => {
             console.info(res1);
         }).catch(error => {
             console.error(error);

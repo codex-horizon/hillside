@@ -33,7 +33,7 @@ public class XTokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String xToken = request.getHeader(Constants.X_TOKEN);
-        if (!StringUtils.hasLength(xToken)) {
+        if (!StringUtils.hasText(xToken)) {
             throw new BusinessException("X-Token 空");
         }
         try {

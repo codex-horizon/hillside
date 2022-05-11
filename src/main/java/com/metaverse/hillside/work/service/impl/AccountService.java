@@ -5,6 +5,7 @@ import com.metaverse.hillside.common.constants.DeleteStatusEnum;
 import com.metaverse.hillside.common.converter.IConverter;
 import com.metaverse.hillside.common.exception.BusinessException;
 import com.metaverse.hillside.common.restful.response.ApiPageable;
+import com.metaverse.hillside.common.utils.CommonUtil;
 import com.metaverse.hillside.core.helper.PromiseRSAHelper;
 import com.metaverse.hillside.core.helper.XTokenHelper;
 import com.metaverse.hillside.work.dto.AccountDto;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
@@ -168,7 +170,10 @@ public class AccountService implements IAccountService {
     @Override
     public String fetchXToken(String account, String password) {
         // 1、账号、密码解密
-        String publicKey = promiseRSAHelper.fetchPublicKey();
+        String publicKey = CommonUtil.getHttpServletRequest().getHeader(Constants.RSA_PUBLIC_KEY);
+        if (!StringUtils.hasText(publicKey)) {
+            throw new BusinessException("RSA-Public-Key 空");
+        }
         account = promiseRSAHelper.decrypt(account, publicKey);
         password = promiseRSAHelper.decrypt(password, publicKey);
         promiseRSAHelper.removeKey(publicKey);
@@ -195,4 +200,6 @@ public class AccountService implements IAccountService {
         return promiseRSAHelper.getPublicKey();
     }
 
+    public static void main(String[] args) {
+    }
 }

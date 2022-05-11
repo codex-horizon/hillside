@@ -53,7 +53,7 @@ public class UserService implements IUserService {
         Page<UserEntity> userEntities = iUserRepository.findAll(
                 (root, criteriaQuery, criteriaBuilder) -> {
                     Predicate predicate = criteriaBuilder.conjunction();
-                    if (!StringUtils.hasLength(userQry.getName())) {
+                    if (!StringUtils.hasText(userQry.getName())) {
                         predicate.getExpressions().add(criteriaBuilder.like(root.get("name"), "%" + userQry.getName() + "%"));
                     }
                     return predicate;
