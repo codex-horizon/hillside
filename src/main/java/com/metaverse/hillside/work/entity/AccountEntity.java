@@ -22,7 +22,7 @@ public class AccountEntity extends AbstractPoEntity implements Serializable {
     @Column(name = "category", unique = false, nullable = false, columnDefinition = "tinyint(1) comment '账号分类'")
     private Integer category;
 
-    @Column(name = "account", unique = true, nullable = false, columnDefinition = "varchar(50) comment '账号'")
+    @Column(name = "account", unique = true, nullable = false, columnDefinition = "varchar(255) comment '账号'")
     private String account;
 
     @Column(name = "password", unique = false, nullable = false, columnDefinition = "varchar(255) comment '密码'")
@@ -33,4 +33,7 @@ public class AccountEntity extends AbstractPoEntity implements Serializable {
 
     @Column(name = "avatar_url", unique = false, nullable = false, columnDefinition = "varchar(255) comment '头像url'")
     private String avatarUrl;
+
+    @Column(name = "state", unique = false, nullable = false, columnDefinition = "tinyint(1) comment '账号状态'")
+    private Integer state;
 }
