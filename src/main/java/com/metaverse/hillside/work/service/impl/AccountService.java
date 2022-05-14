@@ -19,11 +19,17 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +66,20 @@ public class AccountService implements IAccountService {
     @Transactional(readOnly = true)
     @Override
     public ApiPageable<List<AccountVo>> findByPageable(AccountQry accountQry) {
-        Page<AccountEntity> accountEntities = iAccountRepository.findAll(
+        Specification<AccountEntity> qryConditionSpecification = (Specification<AccountEntity>) (root, query, criteriaBuilder) -> {
+            // 账号分类
+            if (!ObjectUtils.isEmpty(accountQry.getCategory())) {
+                // 全量匹配
+                criteriaBuilder.equal(root.get("category"), accountQry.getCategory());
+            }
+            // 账号
+            if (!ObjectUtils.isEmpty(accountQry.getAccount())) {
+                // 模糊匹配
+                criteriaBuilder.like(root.get("account"), accountQry.getAccount());
+            }
+            return criteriaBuilder.conjunction();
+        };
+        Page<AccountEntity> accountEntities = iAccountRepository.findAll(qryConditionSpecification,
                 PageRequest.of(
                         accountQry.getStartPage(),
                         accountQry.getPageSize(),

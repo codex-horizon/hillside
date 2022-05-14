@@ -12,4 +12,9 @@ public class AccountQry extends Pageable {
      * 账户分类
      */
     private Integer category;
+
+    /**
+     * 账户
+     */
+    private String account;
 }
