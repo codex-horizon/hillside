@@ -39,7 +39,7 @@ public interface IAccountService {
      * @param id 账户Id
      * @return 返回 账户 删除 状态
      */
-    Boolean deleteById(Long id);
+    Boolean deleteSoftById(Long id);
 
     /**
      * 根据 账户Id 查询 详情 服务

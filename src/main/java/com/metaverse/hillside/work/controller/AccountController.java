@@ -42,7 +42,6 @@ public class AccountController {
         return ApiResult.succeeded("获取 RSA非对称加密 公钥 完成", iAccountService.fetchPublicKey());
     }
 
-
     /**
      * 获取 X-Token 接口
      *
@@ -115,7 +114,7 @@ public class AccountController {
             path = "/toB/modify",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ApiResult<Boolean> modify(@RequestBody @Validated AccountDto accountDto) {
+    public ApiResult<Boolean> modify(@RequestBody @Validated(ValidatedGroups.Modify.class) AccountDto accountDto) {
         return ApiResult.succeeded("修改 账户 信息 接口", iAccountService.modify(accountDto));
     }
 
@@ -127,10 +126,10 @@ public class AccountController {
      */
     @DeleteMapping(
             name = "根据 账户Id 删除 接口",
-            path = "/t2b/deleteById/{id}"
+            path = "/toB/deleteById/{id}"
     )
     public ApiResult<Boolean> deleteById(@PathVariable("id") Long id) {
-        return ApiResult.succeeded("根据 账户Id 删除 完成", iAccountService.deleteById(id));
+        return ApiResult.succeeded("根据 账户Id 删除 完成", iAccountService.deleteSoftById(id));
     }
 
 }

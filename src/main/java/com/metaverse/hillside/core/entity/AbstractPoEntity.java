@@ -34,7 +34,7 @@ public abstract class AbstractPoEntity implements Serializable {
     @Column(name = "id", unique = false, nullable = false, columnDefinition = "bigint(20) comment '主键'")
     private Long id;
 
-    @Column(name = "status", unique = false, nullable = false, columnDefinition = "tinyint(1) comment '记录状态'")
+    @Column(name = "status", unique = false, nullable = false, columnDefinition = "tinyint(1) default 1 comment '记录状态'")
     private Integer status = DeleteStatusEnum.NOT_DELETED.getCode();
 
     @CreatedBy

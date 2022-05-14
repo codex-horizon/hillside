@@ -19,6 +19,12 @@ public class AccountDto implements Serializable {
     })
     private Integer category;
 
+    @NotNull(message = "账号状态 空", groups = {
+            ValidatedGroups.Add.class,
+            ValidatedGroups.Modify.class
+    })
+    private Integer state;
+
     @NotBlank(message = "账号 空", groups = {
             ValidatedGroups.Login.class,
             ValidatedGroups.Add.class,

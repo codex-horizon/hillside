@@ -40,7 +40,9 @@ public class XTokenInterceptor implements HandlerInterceptor {
             Map<String, Claim> claims = xTokenHelper.getClaims(xToken, envProperties.getJwtSignatureSecretKey());
             String account = claims.get(Constants.ACCOUNT_ID).asString();
             String password = claims.get(Constants.ACCOUNT_PASSWORD).asString();
-            return iAccountService.exists(account, password);
+            if (!iAccountService.exists(account, password)) {
+                throw new BusinessException();
+            }
         } catch (SignatureVerificationException e) {
             throw new BusinessException("X-Token 无效签名");
         } catch (TokenExpiredException e) {
@@ -50,6 +52,7 @@ public class XTokenInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             throw new BusinessException("X-Token 无效");
         }
+        return true;
     }
 
     @Override

@@ -98,15 +98,13 @@ public class AccountService implements IAccountService {
     public Boolean modify(AccountDto accountDto) {
         // 1、预判账户Id是否存在
         Optional.ofNullable(accountDto).map(AccountDto::getId).orElseThrow(() -> new BusinessException("账户Id 空"));
-        if (!iAccountRepository.existsById(accountDto.getId())) {
-            throw new BusinessException("By账号Id查询，信息不存在");
-        }
 
-        // 1、预判账户信息是否存在
+        // 2、预判账户信息是否存在
         AccountEntity accountEntity = iAccountRepository.findById(accountDto.getId())
-                .orElseThrow(() -> new EntityNotFoundException(String.format("By查询账户Id:[%s] 空", accountDto.getId())));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("查询账户Id[%s]不存在", accountDto.getId())));
 
         accountEntity.setCategory(accountDto.getCategory());
+        accountEntity.setState(accountDto.getState());
         accountEntity.setAccount(accountDto.getAccount());
         accountEntity.setPassword(accountDto.getPassword());
         accountEntity.setNickName(accountDto.getNickName());
@@ -124,9 +122,9 @@ public class AccountService implements IAccountService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Boolean deleteById(Long id) {
+    public Boolean deleteSoftById(Long id) {
         if (iAccountRepository.existsById(id)) {
-            iAccountRepository.deleteSoftById(id, DeleteStatusEnum.NOT_DELETED.getCode());
+            iAccountRepository.deleteSoftById(id, DeleteStatusEnum.DELETED.getCode());
         }
         return true;
     }
@@ -141,7 +139,7 @@ public class AccountService implements IAccountService {
     @Override
     public AccountVo findDetailById(Long id) {
         AccountEntity accountEntity = iAccountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("查询账户Id:[%s] 空", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("查询账户Id[%s]空", id)));
         return iConverter.convert(accountEntity, AccountVo.class);
     }
 
@@ -172,7 +170,7 @@ public class AccountService implements IAccountService {
         // 1、账号、密码解密
         String publicKey = CommonUtil.getHttpServletRequest().getHeader(Constants.RSA_PUBLIC_KEY);
         if (!StringUtils.hasText(publicKey)) {
-            throw new BusinessException("RSA-Public-Key 空");
+            throw new BusinessException("RSA-Public-Key空");
         }
         account = promiseRSAHelper.decrypt(account, publicKey);
         password = promiseRSAHelper.decrypt(password, publicKey);
@@ -200,6 +198,4 @@ public class AccountService implements IAccountService {
         return promiseRSAHelper.getPublicKey();
     }
 
-    public static void main(String[] args) {
-    }
 }
