@@ -1,0 +1,22 @@
+server:
+  port: 8082 #指定运行端口
+  servlet:
+    context-path: /gateway
+spring:
+  application:
+    name: HillsideGatewayApplication #指定服务名称
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true #开启通过服务中心的自动根据 serviceId 创建路由的功能
+eureka:
+  instance:
+    hostname: localhost
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka
+    register-with-eureka: true
+    fetch-registry: true
