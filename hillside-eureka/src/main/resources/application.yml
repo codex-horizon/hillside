@@ -1,17 +1,22 @@
 server:
   port: 8081 #指定运行端口
   servlet:
-    context-path: /eureka
+    context-path: /registration-center
 spring:
   application:
     name: HillsideEurekaApplication #指定服务名称
 eureka:
   instance:
     hostname: localhost #指定主机地址
+    prefer-ip-address: true
   client:
-    fetch-registry: false #指定是否要从注册中心获取服务（注册中心不需要开启）
-    register-with-eureka: false #指定是否要注册到注册中心（注册中心不需要开启）
+    # 是否将自己注册到Eureka Server,默认为true，由于当前就是server，故而设置成false，表明该服务不会向eureka注册自己的信息
+    register-with-eureka: false
+    # 是否从eureka server获取注册信息，由于单节点，不需要同步其他节点数据，用false
+    fetch-registry: false
+    # 设置服务注册中心的URL，用于client和server端交流
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-  server:
-    enable-self-preservation: false #关闭保护模式
+      defaultZone: http://${eureka.instance.hostname}:${server.port}${server.servlet.context-path}
+logging:
+  level:
+    root: info

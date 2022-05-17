@@ -3,10 +3,11 @@ package com.metaverse.hillside.common.constants;
 import lombok.Getter;
 
 @Getter
-public enum  AccountStateEnum {
+public enum AccountStateEnum {
 
     DISABLED(0, "禁用"),
     ENABLE(1, "启用"),
+    LOG_OFF(2, "注销"),
     ;
 
     private final Integer code;

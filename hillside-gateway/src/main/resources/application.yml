@@ -5,18 +5,13 @@ server:
 spring:
   application:
     name: HillsideGatewayApplication #指定服务名称
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true #开启通过服务中心的自动根据 serviceId 创建路由的功能
 eureka:
   instance:
-    hostname: localhost
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 10
+    hostname: localhost #指定主机地址
+    prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://localhost:8081/eureka
-    register-with-eureka: true
-    fetch-registry: true
+      defaultZone: http://localhost:8081/registration-center/eureka/
+logging:
+  level:
+    root: info
