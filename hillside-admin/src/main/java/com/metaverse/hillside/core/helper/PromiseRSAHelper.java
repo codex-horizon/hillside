@@ -26,10 +26,6 @@ public class PromiseRSAHelper {
         return initKey();
     }
 
-    public String getPublicKey(String publicKey) {
-        return keyCaches.get(publicKey);
-    }
-
     public void removeKey(String publicKey) {
         keyCaches.remove(publicKey);
     }
