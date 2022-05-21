@@ -13,7 +13,7 @@ import java.util.Arrays;
 @Slf4j
 @Component
 @Aspect
-public class RecordLoggerAop {
+public class RecordLoggerAspect {
 
     @Pointcut("execution(* com.metaverse.hillside.work.controller.*Controller.*(..))")
     public void doPointcutTask() {

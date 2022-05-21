@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 /**
  * 抽象实体基类
@@ -20,6 +21,8 @@ import java.sql.Timestamp;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractPoEntity implements Serializable {
+
+    private static final long serialVersionUUID = 1L;
 
     /*@Id
      *//*JPA标准-主键标识*//*
@@ -43,7 +46,9 @@ public abstract class AbstractPoEntity implements Serializable {
 
     @CreatedDate
     @Column(name = "created_date", unique = false, nullable = false, columnDefinition = "datetime comment '创建时间'")
-    private Timestamp createdDate;
+//    private Timestamp createdDate;
+//    private ZonedDateTime createdDate = ZonedDateTime.now();
+    private ZonedDateTime createdDate;
 
     @LastModifiedBy
     @Column(name = "last_modified_by", unique = false, nullable = false, columnDefinition = "varchar(50) comment '最后修改人'")
@@ -51,6 +56,7 @@ public abstract class AbstractPoEntity implements Serializable {
 
     @LastModifiedDate
     @Column(name = "last_modified_date", unique = false, nullable = false, columnDefinition = "datetime comment '最后修改时间'")
-    private Timestamp lastModifiedDate;
-
+//    private Timestamp lastModifiedDate;
+//    private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
+    private ZonedDateTime lastModifiedDate;
 }
