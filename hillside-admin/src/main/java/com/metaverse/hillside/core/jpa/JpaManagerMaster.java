@@ -12,9 +12,16 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.util.Objects;
 
+/**
+ * DataSource数据源
+ * EntityManager 实体管理器
+ * EntityManagerFactoryBean 实体管理器工厂
+ * PlatformTransactionManager 事务管理器
+ */
 @Configuration
 @EnableJpaRepositories(
         // 配置连接工厂
@@ -52,6 +59,12 @@ public class JpaManagerMaster {
                 .persistenceUnit("masterPersistenceUnit")
                 .build();
     }
+
+//    @Bean
+//    @Primary
+//    public EntityManager entityManagerMaster(EntityManagerFactoryBuilder builder) {
+//        return Objects.requireNonNull(entityManagerFactoryRefMaster(builder).getObject()).createEntityManager();
+//    }
 
     @Bean
     @Primary
