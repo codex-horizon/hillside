@@ -34,7 +34,7 @@ public class UserEntity extends AbstractPoEntity implements Serializable {
     @Column(name = "email", unique = true, nullable = false, columnDefinition = "varchar(50) comment '电子邮箱'")
     private String email;
 
-    @Column(name = "mobile_phone", unique = true, nullable = false, columnDefinition = "varchar(11) comment '移动手机'")
-    private String mobilePhone;
+    @Column(name = "phone", unique = true, nullable = false, columnDefinition = "varchar(11) comment '移动手机'")
+    private String phone;
 
 }
