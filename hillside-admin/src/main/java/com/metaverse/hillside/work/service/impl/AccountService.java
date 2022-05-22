@@ -26,10 +26,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,6 +199,7 @@ public class AccountService implements IAccountService {
         // 3、根据账号、密码生成X-Token并返回
         Map<String, String> payload = new HashMap<>();
         payload.put(Constants.ACCOUNT_ID, account);
+        payload.put(Constants.ACCOUNT_PASSWORD, password);
         return xTokenHelper.generateXToken(payload);
     }
 

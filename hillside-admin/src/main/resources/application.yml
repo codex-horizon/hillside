@@ -5,18 +5,18 @@ server:
 spring:
   application:
     name: HillsideApplication
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    name: hillside_master
-#    url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-#    username: root
-#    password: root
-#  jpa:
-#    open-in-view: false
-#    database: mysql
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: hillside_master
+    url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  jpa:
+    open-in-view: false
+    database: mysql
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 #eureka:
 #  instance:
 #    hostname: localhost #指定主机地址

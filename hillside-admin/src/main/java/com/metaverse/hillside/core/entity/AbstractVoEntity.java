@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 /**
  * 抽象实体基类
@@ -22,10 +23,12 @@ public abstract class AbstractVoEntity implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createdDate;
-
-    private String lastModifiedBy;
+//    private ZonedDateTime createdDate = ZonedDateTime.now();
+//    private ZonedDateTime createdDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp lastModifiedDate;
+//    private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
+//    private ZonedDateTime lastModifiedDate;
 
 }
