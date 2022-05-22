@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Slf4j
 @Configuration
@@ -24,7 +23,7 @@ public class TraceIdFilterRegister {
         return new FilterRegistrationBean<TraceIdFilter>() {{
             setFilter(traceIdFilter());
             setOrder(Ordered.HIGHEST_PRECEDENCE);
-            setUrlPatterns(Collections.singletonList("/**"));
+            setUrlPatterns(Arrays.asList("/*", "/**"));
         }};
     }
 
