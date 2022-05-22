@@ -6,11 +6,11 @@ import javax.servlet.*;
 import java.io.IOException;
 
 @Slf4j
-public class XssAndSqlInjectorFilter implements Filter {
+public class SqlFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-        log.info("XssAndSqlInjectorFilter,init.");
+        log.info("SqlFilter,init.");
     }
 
     @Override
@@ -20,6 +20,6 @@ public class XssAndSqlInjectorFilter implements Filter {
 
     @Override
     public void destroy() {
-        log.info("XssAndSqlInjectorFilter,destroy.");
+        log.info("SqlFilter,destroy.");
     }
 }
