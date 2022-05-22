@@ -23,6 +23,12 @@ import static sun.security.x509.CertificateIssuerExtension.ISSUER;
 @Component
 public class XTokenHelper {
 
+    /**
+     * Key：账户account，以后考虑优化
+     * Value：X-Token字符串
+     */
+    public final static Map<String, String> X_TOKEN_POOLS = new HashMap<>();
+
     private final EnvProperties envProperties;
 
     XTokenHelper(final EnvProperties envProperties) {

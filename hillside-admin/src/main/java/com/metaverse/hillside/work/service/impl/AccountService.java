@@ -199,8 +199,9 @@ public class AccountService implements IAccountService {
         // 3、根据账号、密码生成X-Token并返回
         Map<String, String> payload = new HashMap<>();
         payload.put(Constants.ACCOUNT_ID, account);
-        payload.put(Constants.ACCOUNT_PASSWORD, password);
-        return xTokenHelper.generateXToken(payload);
+        String xToken = xTokenHelper.generateXToken(payload);
+        XTokenHelper.X_TOKEN_POOLS.put(account, xToken);
+        return xToken;
     }
 
     /**

@@ -8,7 +8,6 @@ import com.metaverse.hillside.common.constants.Constants;
 import com.metaverse.hillside.common.exception.BusinessException;
 import com.metaverse.hillside.core.env.EnvProperties;
 import com.metaverse.hillside.core.helper.XTokenHelper;
-import com.metaverse.hillside.work.service.IAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -27,9 +26,6 @@ public class XTokenInterceptor implements HandlerInterceptor {
     @Autowired
     private XTokenHelper xTokenHelper;
 
-    @Autowired
-    private IAccountService iAccountService;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String xToken = request.getHeader(Constants.X_TOKEN);
@@ -39,8 +35,7 @@ public class XTokenInterceptor implements HandlerInterceptor {
         try {
             Map<String, Claim> claims = xTokenHelper.getClaims(xToken, envProperties.getJwtSignatureSecretKey());
             String account = claims.get(Constants.ACCOUNT_ID).asString();
-            String password = claims.get(Constants.ACCOUNT_PASSWORD).asString();
-            if (!iAccountService.exists(account, password)) {
+            if (!XTokenHelper.X_TOKEN_POOLS.containsKey(account)) {
                 throw new BusinessException();
             }
         } catch (SignatureVerificationException e) {

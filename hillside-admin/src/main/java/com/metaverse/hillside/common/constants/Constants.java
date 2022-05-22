@@ -8,8 +8,6 @@ public class Constants {
 
     public static final String ACCOUNT_ID = "Account-Id";
 
-    public static final String ACCOUNT_PASSWORD = "Account-Password";
-
     public static final String RSA_PUBLIC_KEY = "RSA-Public-Key";
 
 }
