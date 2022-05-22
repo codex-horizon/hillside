@@ -53,9 +53,6 @@ public class JpaManagerMaster {
                 .build();
     }
 
-    /**
-     * 配置事物管理器
-     */
     @Bean
     @Primary
     public PlatformTransactionManager transactionManagerRefMaster(EntityManagerFactoryBuilder builder) {

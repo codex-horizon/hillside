@@ -6,11 +6,11 @@ spring:
   application:
     name: HillsideApplication
   datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    name: hillside_master
-#    url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-#    username: root
-#    password: root
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    name: hillside_master
+    #    url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    #    username: root
+    #    password: root
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
       name: hillside_master
@@ -24,11 +24,18 @@ spring:
       username: root
       password: root
   jpa:
-    open-in-view: false
     database: mysql
+    show-sql: true
+    generate-ddl: true
+    open-in-view: false
     hibernate:
       ddl-auto: update
-    show-sql: true
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
 #eureka:
 #  instance:
 #    hostname: localhost #指定主机地址

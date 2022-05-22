@@ -51,9 +51,6 @@ public class JpaManagerSlave {
                 .build();
     }
 
-    /**
-     * 配置事物管理器
-     */
     @Bean
     public PlatformTransactionManager transactionManagerRefSlave(EntityManagerFactoryBuilder builder) {
         return new JpaTransactionManager(Objects.requireNonNull(entityManagerFactoryRefSlave(builder).getObject()));
