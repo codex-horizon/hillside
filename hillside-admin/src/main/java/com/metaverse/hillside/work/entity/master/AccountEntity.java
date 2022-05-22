@@ -1,4 +1,4 @@
-package com.metaverse.hillside.work.entity;
+package com.metaverse.hillside.work.entity.master;
 
 import com.metaverse.hillside.core.entity.AbstractPoEntity;
 import lombok.Data;

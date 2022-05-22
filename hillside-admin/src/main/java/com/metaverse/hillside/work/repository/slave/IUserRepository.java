@@ -1,7 +1,7 @@
-package com.metaverse.hillside.work.repository;
+package com.metaverse.hillside.work.repository.slave;
 
 import com.metaverse.hillside.core.repository.IBaseRepository;
-import com.metaverse.hillside.work.entity.UserEntity;
+import com.metaverse.hillside.work.entity.slave.UserEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -11,6 +11,18 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
+  #    master:
+  #      driver-class-name: com.mysql.cj.jdbc.Driver
+  #      name: hillside_master
+  #      url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.master.name}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+  #      username: root
+  #      password: root
+  #    slave:
+  #      driver-class-name: com.mysql.cj.jdbc.Driver
+  #      name: hillside_slave
+  #      url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.slave.name}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+  #      username: root
+  #      password: root
   jpa:
     open-in-view: false
     database: mysql
