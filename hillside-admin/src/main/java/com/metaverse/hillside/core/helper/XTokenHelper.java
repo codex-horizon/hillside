@@ -17,8 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static sun.security.x509.CertificateIssuerExtension.ISSUER;
-
 @Slf4j
 @Component
 public class XTokenHelper {
@@ -42,25 +40,25 @@ public class XTokenHelper {
      * @return 返回 X-Token
      */
     public String generateXToken(Map<String, String> payload) {
-        JWTCreator.Builder builder = JWT.create();
+        JWTCreator.Builder createJWT = JWT.create();
         // 构建Header
-        builder.withHeader(new HashMap<String, Object>() {{
+        createJWT.withHeader(new HashMap<String, Object>() {{
             put("owner", "auth0");
         }});
 
         // 设置签发主体
-        builder.withIssuer(ISSUER);
+//        createJWT.withIssuer(ISSUER);
 
         // 构建Payload（自定义参数）
-        payload.forEach(builder::withClaim);
+        payload.forEach(createJWT::withClaim);
 
         // 设置签发时间
-        builder.withIssuedAt(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+        createJWT.withIssuedAt(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 
         // 构建并设置指定X-Token过期时间为1天、签名算法
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, 1);
-        return builder
+        return createJWT
                 .withExpiresAt(calendar.getTime())
                 .sign(Algorithm.HMAC256(envProperties.getJwtSignatureSecretKey()));
     }

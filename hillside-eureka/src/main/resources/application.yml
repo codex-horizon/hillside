@@ -16,7 +16,7 @@ eureka:
     fetch-registry: false
     # 设置服务注册中心的URL，用于client和server端交流
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}${server.servlet.context-path}
+      defaultZone: http://${eureka.instance.hostname}:${server.port}${server.servlet.context-path}/eureka/
 logging:
   level:
     root: info
