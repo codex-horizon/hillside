@@ -5,7 +5,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.metaverse.hillside.common.exception.BusinessException;
-import com.metaverse.hillside.common.exception.ValidatedException;
 import com.metaverse.hillside.common.restful.response.ApiResult;
 import com.metaverse.hillside.common.restful.response.IResult;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +35,7 @@ public class GlobalExceptionAdvice {
         return ApiResult.failed(e.getMessage());
     }
 
-    @ExceptionHandler({
-            BusinessException.class,
-            ValidatedException.class
-    })
+    @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.OK)
     public IResult<String> handle(HttpServletRequest request, BusinessException e) {
         log.error("方法:[{}],请求url:[{}],异常信息:[{}]", request.getMethod(), request.getRequestURI(), e.getMessage(), e);

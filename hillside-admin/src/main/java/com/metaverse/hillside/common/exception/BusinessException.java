@@ -26,12 +26,4 @@ public class BusinessException extends RuntimeException {
                              boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-
-    public static ThrowException isTrue(boolean bool) {
-        return (errorMessage) -> {
-            if (bool) {
-                throw new BusinessException(errorMessage);
-            }
-        };
-    }
 }
